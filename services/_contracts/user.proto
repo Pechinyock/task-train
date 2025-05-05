@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "Me.Contracts";
+
+package user;
+
+message CreateUserRequest {
+    string login = 1;
+    string password = 2;
+    string repeat_password = 3;
+}
+
+message CreateUserResponse{
+    string login = 1;
+    bool is_success = 2;
+}
+
+service UserHub {
+    rpc Create (CreateUserRequest) returns (CreateUserResponse);
+}

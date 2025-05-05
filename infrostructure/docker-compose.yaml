@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  dotnet-packages:
+    container_name: dotnet-packages
+    environment:
+      - ASPNETCORE_URLS=http://+
+    volumes:
+      - dotnet-packages-storage:/var/baget
+    build:
+      context: ./BaGet
+    ports:
+      - ${HTTP_PORT}:80
+
+volumes:
+  dotnet-packages-storage:
+    name: dotnet-packages-storage

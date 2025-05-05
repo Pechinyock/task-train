@@ -1,0 +1,6 @@
+[list of thinks that should exists]
+- Nuget server (BaGet)
+- Grafana + [data storage for it]
+- docker registry ???
+- key vault
+- documentation site...

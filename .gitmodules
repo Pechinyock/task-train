@@ -1,0 +1,9 @@
+[submodule "services/users-hub"]
+	path = services/users-hub
+	url = https://github.com/Pechinyock/users-hub.git
+[submodule "services/_shared/dotnet/TaskTrainCore"]
+	path = services/_shared/dotnet/TaskTrainCore
+	url = https://github.com/Pechinyock/TaskTrainCore.git
+[submodule "services/_shared/dotnet/TaskTrainContracts"]
+	path = services/_shared/dotnet/TaskTrainContracts
+	url = https://github.com/Pechinyock/TaskTrainContracts.git
