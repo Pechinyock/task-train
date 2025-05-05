@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Me.Contracts";
+option csharp_namespace = "TaskTrain.Contracts";
 
 package user;
 
