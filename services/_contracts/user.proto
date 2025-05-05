@@ -12,7 +12,6 @@ message CreateUserRequest {
 
 message CreateUserResponse{
     string login = 1;
-    bool is_success = 2;
 }
 
 service UserHub {

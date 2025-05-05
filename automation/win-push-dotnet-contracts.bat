@@ -18,3 +18,5 @@ for %%f in (%CD%\*.nupkg) do (
 )
 
 cd %SCRIPT_HOME_PATH%
+
+PAUSE
