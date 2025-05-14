@@ -25,7 +25,7 @@ echo container's name: %container_name%
 echo.
 echo postgres user password: %password%
 echo.
-echo port for acces from host machine: %port%
+echo port for access from host machine: %port%
 echo.
 
 cd %SCRIPT_HOME_PATH%
