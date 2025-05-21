@@ -7,3 +7,6 @@
 [submodule "services/_shared/dotnet/TaskTrainLibrary"]
 	path = services/_shared/dotnet/TaskTrainLibrary
 	url = https://github.com/Pechinyock/TaskTrainLibrary.git
+[submodule "tests/dotnet"]
+	path = tests/dotnet
+	url = https://github.com/Pechinyock/TaskTrainServicesTesting.git
