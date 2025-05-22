@@ -10,3 +10,6 @@
 [submodule "tests/dotnet"]
 	path = tests/dotnet
 	url = https://github.com/Pechinyock/TaskTrainServicesTesting.git
+[submodule "services/api-gateway"]
+	path = services/api-gateway
+	url = https://github.com/Pechinyock/api-gateway.git
