@@ -4,13 +4,19 @@ services:
   dotnet-packages:
     container_name: dotnet-packages
     environment:
-      - ASPNETCORE_URLS=http://+
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=${BAGET_HTTPS_PORT}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${BAGET_CERTIFICATE_PASSWORD}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${BAGET_CERTIFICATE_FULL_PATH}
     volumes:
       - dotnet-packages-storage:/var/baget
     build:
       context: ./BaGet
+    networks:
+      - nuget-net
     ports:
       - ${BAGET_HTTP_PORT}:80
+      - ${BAGET_HTTPS_PORT}:443
 
 # [ISSUE] sending logs to unexistisng service
 # Don't understand how to disable that kind of behaviour
@@ -28,3 +34,7 @@ volumes:
     name: dotnet-packages-storage
   docker-registry-storage:
     name: docker-registry-storage
+
+networks:
+  nuget-net:
+    driver: bridge
