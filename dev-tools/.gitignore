@@ -1,0 +1,6 @@
+.vs
+_bin
+_bin-int
+_publish
+**/bin/
+**/obj/
