@@ -89,9 +89,9 @@ public class CommandParserTests
     [Theory]
     [InlineData("test", null)]
     [InlineData("test sub", null)]
-    [InlineData("test -other", new string[] { "-other" })]
-    [InlineData("test sub -other", new string[] { "-other" })]
-    public void ParseCommandAndArgunets_Test(string input, string[] argsShoudBe)
+    [InlineData("test -other", new string[] { "other" })]
+    [InlineData("test sub -other", new string[] { "other" })]
+    public void ParseCommandAndArgumets_Test(string input, string[] argsShoudBe)
     {
         var storage = new TestCommandLibrary();
         var parser = new CommandParser(storage);
@@ -104,10 +104,54 @@ public class CommandParserTests
         }
 
         Assert.NotNull(result);
-        foreach (var (index, argument) in result.Arguments.Index()) 
+        foreach (var (index, argument) in result.Arguments.Index())
         {
             Assert.Equal(argsShoudBe[index], argument);
+        }
+    }
 
+    [Theory]
+    [InlineData("test", null, null)]
+    [InlineData("test sub", null, null)]
+    [InlineData("test -param:value"
+        , new string[] { "param" }
+        , new string[] { "value" }
+    )]
+    [InlineData("test sum -param:value"
+        , new string[] { "param" }
+        , new string[] { "value" }
+    )]
+    [InlineData("test sum -param:value -name:hui -drunkArg -withLog:remote"
+        , new string[] { "param", "name", "withLog" }
+        , new string[] { "value", "hui", "remote" }
+    )]
+    [InlineData("test sum -param:value -name:hui justRundomText -drunkArg -withLog:remote"
+        , new string[] { "param", "name", "withLog" }
+        , new string[] { "value", "hui", "remote" }
+    )]
+    public void ParseCommandAndParameters_Test(string input, string[] expectingAddedKeys, string[] expectingAddedValues)
+    {
+        var storage = new TestCommandLibrary();
+        var parser = new CommandParser(storage);
+        var result = parser.Parse(input);
+
+        if (expectingAddedKeys is null)
+        {
+            Assert.Null(result.Parameters);
+            return;
+        }
+
+        Assert.NotNull(result);
+        foreach (var parameter in expectingAddedKeys)
+        {
+            Assert.True(result.Parameters.ContainsKey(parameter));
+        }
+
+        for (int i = 0; i < expectingAddedValues.Length; ++i) 
+        {
+            var addedValue = result.Parameters[expectingAddedKeys[i]];
+            var expectedValue = expectingAddedValues[i];
+            Assert.Equal(expectedValue, addedValue);
         }
     }
 }

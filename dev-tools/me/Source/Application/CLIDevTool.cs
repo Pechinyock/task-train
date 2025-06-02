@@ -18,6 +18,9 @@ internal sealed class CLIDevTool
         var parser = new CommandParser(commandStorage);
 
         var cmd = parser.Parse(input);
+        if (cmd is null)
+            Print.Error($"Couldn't find command : {input}");
+
         var pipeline = new CommandsPipeline(cmd);
 
         pipeline.Start();
