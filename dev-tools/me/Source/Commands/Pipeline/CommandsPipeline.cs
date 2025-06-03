@@ -9,7 +9,8 @@ internal sealed class CommandsPipeline : PipelineBase<CommandBase>
     public CommandsPipeline(CommandBase command)
     {
         _commandStages = [
-            new Validate(command)
+            new Validate(command),
+            new Execute(command)
         ];
     }
 }

@@ -2,12 +2,12 @@
 
 internal sealed class CommandParser : IParser<CommandBase>
 {
-    private readonly ICommandsStorage<CommandBase> _storage;
+    private readonly IStorage<CommandBase> _storage;
 
     private const string COMMAND_INPUT_INDICATOR = "-";
     private const char COMMAND_PARAMETER_KEY_VALUE_SEPORATOR = ':';
 
-    public CommandParser(ICommandsStorage<CommandBase> storage)
+    public CommandParser(IStorage<CommandBase> storage)
     {
         _storage = storage;
     }
@@ -23,18 +23,9 @@ internal sealed class CommandParser : IParser<CommandBase>
         return cmd;
     }
 
-
-
-    /* [TODO]
-     * seems to be good idia to collect unexpected tokens and if they are exists
-     * change cmd execution mode to 'soft' (ask user wtf is happend) and only then
-     * execute. BUT not for all commands only for that one wich could currupt something
-     * or made some annoying result. 
-     */
-
     /** [Input format]
-    * {command-alias} {sub-command}? {-switch}? {-parameterName:parameterValue}?
-    */
+     * {command-alias} {sub-command}? {-switch}? {-parameterName:parameterValue}?
+     */
     public CommandBase Parse(string[] input)
     {
         var alias = input[0];
@@ -49,12 +40,13 @@ internal sealed class CommandParser : IParser<CommandBase>
         if (commandInfo.Length == 0)
             return founded;
 
-        if (commandInfo[0].StartsWith(COMMAND_INPUT_INDICATOR))
+        if (!commandInfo[0].StartsWith(COMMAND_INPUT_INDICATOR))
         {
             founded.SubCommand = commandInfo[0];
         }
 
         var foundedArgs = new List<string>(5);
+        var unexpected = new List<string>();
 
         for (int i = 0; i < commandInfo.Length; ++i)
         {
@@ -95,7 +87,7 @@ internal sealed class CommandParser : IParser<CommandBase>
         }
 
         var argsResult = foundedArgs
-            .Where(x => x != null)
+            .Where(x => x is not null)
             .ToArray();
 
         founded.Arguments = argsResult.Length == 0

@@ -1,6 +1,6 @@
 ﻿namespace Me;
 
-internal interface ICommandsStorage<TType>
+internal interface IStorage<TType>
 {
     TType Request(string alias);
     TType[] Request(char letter);

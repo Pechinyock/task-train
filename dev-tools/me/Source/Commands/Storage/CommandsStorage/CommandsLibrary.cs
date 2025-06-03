@@ -1,10 +1,11 @@
 ﻿namespace Me;
 
-internal sealed class CommandsLibrary : ICommandsStorage<CommandBase>
+internal sealed class CommandsLibrary : IStorage<CommandBase>
 {
     private static readonly Dictionary<char, Dictionary<string, CommandBase>> LibraryMap = new()
     {
         { 'h', H.Get() },
+        { 't', T.Get() }
     };
 
 

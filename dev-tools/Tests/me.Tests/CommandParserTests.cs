@@ -4,22 +4,18 @@ internal class TestCommand : CommandBase
 {
     public override string Alias => "test";
 
-    public override CommandTypesEnumFlag Flags => CommandTypesEnumFlag.Argumented
-        | CommandTypesEnumFlag.SubCommanded
-        | CommandTypesEnumFlag.Parzmetrized;
-
     public override void Execute()
     {
 
     }
 }
 
-internal class TestCommandLibrary : ICommandsStorage<CommandBase>
+internal class TestCommandLibrary : IStorage<CommandBase>
 {
 
     private readonly Dictionary<string, CommandBase> _lib = new()
     {
-        {"test", new TestCommand()}
+        { "test", new TestCommand() }
     };
 
     public CommandBase Request(string alias)
@@ -40,7 +36,6 @@ internal class TestCommandLibrary : ICommandsStorage<CommandBase>
         throw new NotImplementedException();
     }
 }
-
 
 public class CommandParserTests
 {
@@ -147,7 +142,7 @@ public class CommandParserTests
             Assert.True(result.Parameters.ContainsKey(parameter));
         }
 
-        for (int i = 0; i < expectingAddedValues.Length; ++i) 
+        for (int i = 0; i < expectingAddedValues.Length; ++i)
         {
             var addedValue = result.Parameters[expectingAddedKeys[i]];
             var expectedValue = expectingAddedValues[i];
