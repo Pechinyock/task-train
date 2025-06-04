@@ -1,20 +1,26 @@
-﻿
-namespace Me;
+﻿namespace Me;
 
-internal sealed class Tools : CommandBase
-                            , ISubcommanded
+internal sealed class ToolsProjection : ICommandProjection
 {
-    public override string Alias => "tools";
+    public bool IsSubcommandRequred => true;
+
     public Dictionary<string, string> AvailableSubCommands => new()
-    { 
-        { "list", "List all external tolls that should be installed" }
+    {
+        { "list", "List all external tools that should be installed" },
     };
 
-    public override string Description => "Handles everything about external tools. For example 'docker', 'dotnet', 'get' etc...";
+    public Dictionary<string, bool> AvailableParameters => null;
+}
 
+internal sealed class Tools : CommandBase
+{
+    public override string Alias => "tools";
+    public override string Description => "Handles everything about external tools. For example 'docker', 'dotnet', 'get' etc...";
+    public override string Usage => "tools {subcommand}";
+    public override ICommandProjection Projection => new ToolsProjection();
 
     public override void Execute()
     {
-        Print.Info("Tools");
+        Print.Info($"usage: {Usage}");
     }
 }

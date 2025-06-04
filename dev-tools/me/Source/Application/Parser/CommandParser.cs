@@ -32,7 +32,10 @@ internal sealed class CommandParser : IParser<CommandBase>
         var founded = _storage.Request(alias);
 
         if (founded is null)
+        {
+            Print.Error($"Command not found: {alias}");
             return null;
+        }
 
         var commandInfo = input.Skip(1)
             .ToArray();

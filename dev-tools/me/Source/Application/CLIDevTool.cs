@@ -1,4 +1,6 @@
-﻿namespace Me;
+﻿using System.Diagnostics;
+
+namespace Me;
 
 internal sealed class CLIDevTool
 {
@@ -14,25 +16,52 @@ internal sealed class CLIDevTool
             .Where(x => !String.IsNullOrWhiteSpace(x))
             .ToArray();
 
-        if (input is null || input.Length == 0)
-        {
-            Print.Error($"input couldn't be empty");
-            return;
-        }
-
         var commandStorage = new CommandsLibrary();
-        var parser = new CommandParser(commandStorage);
+        var commandParser = new CommandParser(commandStorage);
 
-        var cmd = parser.Parse(input);
-        if (cmd is null)
-        {
-            Print.Error($"Couldn't find command : {input[0]}");
+        var commandToExecute = commandParser.Parse(input);
+
+        if (commandToExecute is null)
             return;
+
+        if (!IsCommandValid(commandToExecute))
+            return;
+
+        commandToExecute.Execute();
+    }
+
+    private static bool IsCommandValid(CommandBase command) 
+    {
+        bool result = true;
+        var subCommand = command.SubCommand;
+
+        var projection = command.Projection;
+        Debug.Assert(projection is not null, "Projection can't be null");
+
+        var isSubCommandRequired = projection.IsSubcommandRequred;
+        var isSubCommandFilled = !String.IsNullOrEmpty(subCommand);
+
+        if (isSubCommandRequired && !isSubCommandFilled)
+        {
+            Print.Error($"{command.Alias} requires subcommand!");
+            return false;
         }
 
-        var pipeline = new CommandsPipeline(cmd);
+        if (isSubCommandFilled)
+        {
+            var availableSubCommands = projection.AvailableSubCommands;
+            Debug.Assert(availableSubCommands is not null || availableSubCommands.Count > 0
+                , "Implements interface but doesn't have any subcommands"
+            );
 
-        pipeline.Start();
+            if (!availableSubCommands.ContainsKey(command.SubCommand)) 
+            {
+                result = false;
+                Print.Error($"The command: '{command.Alias}' doesn't have '{subCommand}' subcommand");
+            }
+        }
+
+        return result;
     }
 
     private static ILogger GetLogger() 

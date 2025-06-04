@@ -4,6 +4,12 @@ internal class TestCommand : CommandBase
 {
     public override string Alias => "test";
 
+    public override string Description => throw new NotImplementedException();
+
+    public override string Usage => throw new NotImplementedException();
+
+    public override ICommandProjection Projection => throw new NotImplementedException();
+
     public override void Execute()
     {
 

@@ -1,21 +1,24 @@
-﻿
+﻿namespace Me;
 
-namespace Me;
+internal sealed class HelpProjection : ICommandProjection
+{
+    public bool IsSubcommandRequred => false;
+    public Dictionary<string, string> AvailableSubCommands => Help.GetAvailableSubCommnds();
+    public Dictionary<string, bool> AvailableParameters => null;
+}
 
 internal sealed class Help : CommandBase
-                           , ISubcommanded
 {
     public override string Alias => "help";
-
     public override string Description => "Use it! It will pretend that is is helpful...";
-
-    public Dictionary<string, string> AvailableSubCommands => GetAvailableSubCommnds();
+    public override string Usage => "help\n help {any other command}\n help {character}\n"; 
+    public override ICommandProjection Projection => new HelpProjection();
 
     public override void Execute()
     {
         foreach (var command in GetAllCommands())
         {
-            Print.Info($"{command.Alias} : {command.Description}");
+            Print.String($"{command.Alias} : {command.Description}");
         }
     }
 
@@ -32,11 +35,26 @@ internal sealed class Help : CommandBase
         return allCommands;
     }
 
-    private static Dictionary<string, string> GetAvailableSubCommnds() 
+    internal static Dictionary<string, string> GetAvailableSubCommnds() 
     {
         var commands = GetAllCommands()
             .Select(x => x.Alias)
-            .ToDictionary(key=>key);
-        return commands;
+            .ToDictionary(key => key);
+
+        var letters = new Dictionary<string, string>();
+
+        for (char letter = 'a'; letter <= 'z'; ++letter) 
+        {
+            foreach (var cmd in commands) 
+            {
+                if(cmd.Key.StartsWith(letter))
+                    letters.Add($"{letter}", null);
+            }
+        }
+
+        var result = commands.Concat(letters)
+            .ToDictionary(key => key.Key, value => value.Value);
+
+        return result;
     }
 }
