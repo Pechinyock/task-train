@@ -16,23 +16,7 @@ internal sealed class Help : CommandBase
 
     public override void Execute()
     {
-        foreach (var command in GetAllCommands())
-        {
-            Print.String($"{command.Alias} : {command.Description}");
-        }
-    }
 
-    private static CommandBase[] GetAllCommands() 
-    {
-        var lib = new CommandsLibrary();
-
-        Action printSubCommandInfo = () => {};
-
-        var allCommands = lib.RequestAll()
-            .Where(x => x.Alias != "help")
-            .ToArray();
-
-        return allCommands;
     }
 
     internal static Dictionary<string, string> GetAvailableSubCommnds() 
@@ -56,5 +40,18 @@ internal sealed class Help : CommandBase
             .ToDictionary(key => key.Key, value => value.Value);
 
         return result;
+    }
+
+    private static CommandBase[] GetAllCommands() 
+    {
+        var lib = new CommandsLibrary();
+
+        Action printSubCommandInfo = () => {};
+
+        var allCommands = lib.RequestAll()
+            .Where(x => x.Alias != "help")
+            .ToArray();
+
+        return allCommands;
     }
 }
