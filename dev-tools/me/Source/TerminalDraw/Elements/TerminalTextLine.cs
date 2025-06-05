@@ -26,7 +26,9 @@ internal sealed class TerminalTextLine : IDrawable
 
     private void DrawText()
     {
-        Format();
+        if(_textAlignment != TextAlignmentEnum.Left)
+            Format();
+
         Console.WriteLine(_text);
     }
 
