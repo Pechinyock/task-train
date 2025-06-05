@@ -37,7 +37,7 @@ internal sealed class TerminalTextLine : IDrawable
     private void Format()
     {
         var characterCount = _text.Length;
-        const int offsetForAlignment = 1;
+        const int offsetForAlignment = 2;
         var consoleWidth = Console.WindowWidth - offsetForAlignment;
 
         var formatedText = new StringBuilder();
@@ -52,16 +52,20 @@ internal sealed class TerminalTextLine : IDrawable
 
             ++lineSymolsCount;
 
-            if (isNewLineCharacter || isOverflowed || isEndOfWholeText) 
+            if (isNewLineCharacter || isOverflowed || isEndOfWholeText)
             {
                 var leftSpacesCount = _textAlignment == TextAlignmentEnum.Center
                     ? (consoleWidth - lineSymolsCount) / 2
                     : (consoleWidth - lineSymolsCount);
 
-                if (leftSpacesCount > 0)
+                if(leftSpacesCount > 0)
                     formatedText.Append(' ', leftSpacesCount);
 
-                for (; lastAdditionCursorIndex <= textIterator; ++lastAdditionCursorIndex) 
+                var appendUnless = Char.IsLetterOrDigit(_text[textIterator])
+                        ? FindLeftClosesSpaceIndex(_text, textIterator)
+                        : textIterator;
+
+                for (; lastAdditionCursorIndex <= appendUnless; ++lastAdditionCursorIndex)
                 {
                     formatedText.Append(_text[lastAdditionCursorIndex]);
                 }
@@ -74,5 +78,16 @@ internal sealed class TerminalTextLine : IDrawable
         }
 
         _text = formatedText;
+    }
+
+    public static int FindLeftClosesSpaceIndex(StringBuilder sb, int startAt)
+    {
+        for (int i = startAt; ; --i)
+        {
+            if (sb[i] == ' ')
+                return i;
+            if (i <= 0)
+                Debug.Assert(false, "what the fuck?");
+        }
     }
 }
