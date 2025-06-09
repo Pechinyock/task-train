@@ -6,7 +6,7 @@ internal static class Print
 
     public static void PrintColored(string msg, ConsoleColor color)
     {
-        var text = new TerminalTextLine(msg);
+        var text = new TerminalText(msg);
         _defautlBrush.Color = color;
         text.Draw(_defautlBrush);
     }

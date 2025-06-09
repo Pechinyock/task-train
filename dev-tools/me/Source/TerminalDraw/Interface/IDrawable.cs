@@ -1,5 +1,4 @@
-﻿using System;
-namespace Me;
+﻿namespace Me;
 
 internal interface IDrawable
 {

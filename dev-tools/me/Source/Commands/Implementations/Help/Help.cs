@@ -16,10 +16,16 @@ internal sealed class Help : CommandBase
 
     public override void Execute()
     {
-        var brush = new TerminalBrush(Console.ForegroundColor);
-        brush.Color = ConsoleColor.DarkGreen;
-        var text = new TerminalTextLine("this one is a large text that should be display in console as cool as possible but I don't sure if it is work actualy", TextAlignmentEnum.Center);
-        text.Draw(brush);
+        var brush = new TerminalBrush(ConsoleColor.DarkGreen);
+        var table = new TerminalTable(new TablePattern(3));
+        table.AddRow("", "", "");
+        table.AddRows([
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+        ]);
+        table.Draw(brush);
     }
 
     internal static Dictionary<string, string> GetAvailableSubCommnds() 

@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
-using System.Numerics;
-using System.Text;
+﻿using System.Text;
+using System.Diagnostics;
 
 namespace Me;
 
-internal sealed class TerminalTextLine : IDrawable
+internal sealed class TerminalText : IDrawable
 {
     public const char NEW_LINE_CHARACTER = '\n';
 
     private StringBuilder _text;
     private readonly TextAlignmentEnum _textAlignment;
 
-    public TerminalTextLine(string text, TextAlignmentEnum textAlignment = TextAlignmentEnum.Left)
+    public TerminalText(string text, TextAlignmentEnum textAlignment = TextAlignmentEnum.Left)
     {
         _text = new StringBuilder(text);
         _textAlignment = textAlignment;
@@ -43,6 +42,22 @@ internal sealed class TerminalTextLine : IDrawable
         var consoleWidth = Console.WindowWidth - offsetForAlignment;
 
         var formatedText = new StringBuilder();
+
+        bool fitInSingleLine = _text.Length <= consoleWidth;
+
+        if (fitInSingleLine) 
+        {
+            var leftSpacesCount = _textAlignment == TextAlignmentEnum.Center
+                ? (consoleWidth - _text.Length) / 2
+                : (consoleWidth - _text.Length);
+
+            if (leftSpacesCount > 0)
+                formatedText.Append(' ', leftSpacesCount);
+
+            formatedText.Append(_text);
+            _text = formatedText;
+            return;
+        }
 
         for (int textIterator = 0, lineSymolsCount = 0, lastAdditionCursorIndex = 0;
             textIterator < _text.Length;

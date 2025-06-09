@@ -11,8 +11,7 @@ internal sealed class TerminalBrush : IBrush
 
     public TerminalBrush(ConsoleColor defaultTextColor)
     {
-        _defaultColor = defaultTextColor;
+        _defaultColor = Console.ForegroundColor;
         _currentColor = defaultTextColor;
     }
-
 }
